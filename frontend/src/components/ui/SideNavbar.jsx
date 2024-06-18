@@ -118,6 +118,7 @@ function SideNavbar({ index_, Role } = props) {
                   if (nav_.index_ == index_) {
                     return (
                       <div
+                      key={nav_.index_}
                         onClick={() => navigate(nav_.link)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary bg-muted transition-all hover:text-primary"
                       >
@@ -128,6 +129,7 @@ function SideNavbar({ index_, Role } = props) {
                   } else {
                     return (
                       <div
+                       key={nav_.index_}
                         onClick={() => navigate(nav_.link)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                       >
@@ -141,6 +143,7 @@ function SideNavbar({ index_, Role } = props) {
                   if (nav_.index_ == index_) {
                     return (
                       <div
+                        key={nav_.index_}
                         onClick={() => navigate(nav_.link)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary bg-muted transition-all hover:text-primary"
                       >
@@ -151,6 +154,7 @@ function SideNavbar({ index_, Role } = props) {
                   } else {
                     return (
                       <div
+                        key={nav_.index_}
                         onClick={() => navigate(nav_.link)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                       >

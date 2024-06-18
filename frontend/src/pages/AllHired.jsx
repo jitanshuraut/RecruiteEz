@@ -13,17 +13,10 @@ import Nav_Top_Heading from "@/components/ui/Nav_Top_Heading";
 
 export function AllHired() {
   const navigate = useNavigate();
-  const [recruiterId, setRecruiterid] = useState("");
+  const [recruiterId, setRecruiterid] = useState(
+    window.sessionStorage.getItem("userId")
+  );
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const userId = window.sessionStorage.getItem("userId");
-    console.log("recruiter Id : ", userId);
-    setRecruiterid(userId);
-  }, []);
-
-
-
   const [candidates, setCandidates] = useState([]);
   const [error, setError] = useState("");
 
@@ -33,6 +26,7 @@ export function AllHired() {
         const response = await axios.get(
           `http://localhost:8080/jobs/hired/${recruiterId}`
         );
+        console.log(response.data)
         setCandidates(response.data);
       } catch (err) {
         setError("Failed to fetch candidates: " + err.message);

@@ -16,25 +16,41 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/ui/Navbar";
 import SideNavbar from "@/components/ui/SideNavbar";
 import Tabs_Holder from "@/components/ui/Tabs_Holder";
+import { useQuery } from "@tanstack/react-query";
+import { BounceLoader } from "react-spinners";
+import { Get_recruiter_Jobs } from "@/api/Recruiter_Apis.jsx";
+import { Get_Job, job_Candidates } from "@/api/Jobs_Api";
 
 export function InterviewList() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [job, setjob] = useState([]);
+  const [jobInterviews, setjobInterviews] = useState(second);
+
   const { jobId } = location.state || {};
   console.log(jobId);
 
-  const job = useDataFetch(`http://localhost:8080/jobs/${jobId}`);
-  console.log(job);
+  const { data_job, status_job, isFetching_job } = useQuery({
+    queryKey: ["recruiter:jobs", jobId],
+    queryFn: Get_Job,
+  });
 
-  const jobCandidates = useDataFetch(
-    `http://localhost:8080/jobs/${jobId}/candidates`
-  );
-  console.log(jobCandidates);
+  useEffect(() => {
+    if (status_job === "success" && data_job) {
+      setjob(data_job);
+    }
+  }, [status_job, data_job]);
 
-  const jobInterviews = useDataFetch(
-    `http://localhost:8080/jobs/${jobId}/interviews`
-  );
-  console.log(jobInterviews);
+  const { data_intv, status_intv, isFetching_intv } = useQuery({
+    queryKey: ["recruiter:jobs", jobId],
+    queryFn: jobInterviews,
+  });
+
+  useEffect(() => {
+    if (status_intv === "success" && data_intv) {
+      setjobInterviews(data_intv);
+    }
+  }, [status_intv, data_intv]);
 
   const handleHired = async (userId, index) => {
     console.log(userId, index);

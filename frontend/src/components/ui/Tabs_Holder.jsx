@@ -38,7 +38,10 @@ function Tabs_Holder({
                 {TableHead_Data.map((head) => {
                   if (head.class_ == true) {
                     return (
-                      <TableHead className="hidden sm:table-cell">
+                      <TableHead
+                        key={head.name}
+                        className="hidden sm:table-cell"
+                      >
                         {head.name}
                       </TableHead>
                     );

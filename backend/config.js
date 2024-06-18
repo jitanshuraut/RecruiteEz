@@ -1,6 +1,6 @@
 const PORT = 8080;
 const mongoDBURL =
-  "mongodb+srv://ankit:ankit@atlascluster.cc2s6zh.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster";
+  "mongodb://localhost:27017/RecruiteEz";
 const JWT_SECRET_CANDIDATE = "qwertyuiop789456123";
 const JWT_SECRET_RECRUITER = "asdfghjkll789456123";
 const DEV_MODE = "development";

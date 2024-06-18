@@ -1,6 +1,3 @@
-import nodemailer from "nodemailer";
-import { Recruiter } from "../models/candidateModel.js";
-import { Candidate } from "../models/candidateModel.js";
 import MyResumeSchema from "../models/ResumePdf.js";
 
 export const viewResume = async (req, res) => {

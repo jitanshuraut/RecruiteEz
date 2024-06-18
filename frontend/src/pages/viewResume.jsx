@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-export function ViewResume() {
+export function ViewResume({ UserId } = props) {
   const { candidateId } = useParams();
   console.log("candidateId", candidateId);
+  let Final_RenderId;
+  if (candidateId != undefined) {
+    Final_RenderId = candidateId;
+  } else {
+    Final_RenderId = UserId;
+  }
 
   const [pdfDataUrl, setPdfDataUrl] = useState(null);
   const [error, setError] = useState(null);
@@ -14,7 +20,7 @@ export function ViewResume() {
     const fetchPdfData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/jobs/resume/${candidateId}`,
+          `http://localhost:8080/jobs/resume/${Final_RenderId}`,
           {
             responseType: "arraybuffer",
           }

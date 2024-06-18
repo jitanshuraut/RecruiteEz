@@ -7,7 +7,7 @@ function useDataFetch(url) {
 
   useEffect(() => {
     const separator = url.includes("?") ? "&" : "?";
-    const tokenUrl = `${url}${separator}token=${token}`;
+    const tokenUrl = `${url}`;
 
     fetch(tokenUrl)
       .then((response) => {

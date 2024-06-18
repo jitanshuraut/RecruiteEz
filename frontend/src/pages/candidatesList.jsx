@@ -106,7 +106,7 @@ export function CandidatesList() {
     }
   };
 
-  const [dateTime, setDateTime] = React.useState({
+  const [dateTime, setDateTime] = useState({
     date: new Date(),
     time: "10:00",
   });

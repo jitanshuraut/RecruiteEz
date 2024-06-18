@@ -2,10 +2,9 @@ import { Job } from "../models/jobSchema.js";
 import { Candidate, Recruiter } from "../models/candidateModel.js";
 import { ResumeFile } from "../models/jobSchema.js";
 import JWT from "jsonwebtoken";
-import { sendMail } from "../controllers/sendMail.js";
-import { viewResume } from "../controllers/viewResume.js";
 import MyResumeSchema from "../models/ResumePdf.js";
 import axios from "axios";
+import { sendMail } from "./sendMail.js";
 
 // POST - Create a new job
 export const create_Job = async (req, res) => {
@@ -43,6 +42,21 @@ export const create_Job = async (req, res) => {
 
 // GET - Retrieve all jobs
 export const get_All_Job = async (req, res) => {
+  const { userId } = req.body;
+  try {
+    console.log(userId);
+    const jobs = await Job.find({
+      candidates: {
+        $elemMatch: { candidateId: userId },
+      },
+    });
+    res.send(jobs);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+export const get_All_Post = async (req, res) => {
   try {
     const jobs = await Job.find({});
     res.send(jobs);
@@ -73,17 +87,15 @@ export const get_All_Job = async (req, res) => {
 
 // GET - Retrieve a single job by ID
 export const get_single_Job = async (req, res) => {
-  async (req, res) => {
-    try {
-      const job = await Job.findById(req.params.jobId);
-      if (!job) {
-        return res.status(404).send();
-      }
-      res.send(job);
-    } catch (error) {
-      res.status(500).send(error);
+  try {
+    const job = await Job.findById(req.params.jobId);
+    if (!job) {
+      return res.status(404).send();
     }
-  };
+    res.send(job);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 };
 
 // GET - Retrieve all candidates for a job by ID
@@ -169,12 +181,22 @@ export const getCandidates_for_Interview = async (req, res) => {
   console.log("Recruiter ID:", recruiterId);
   try {
     // Assuming Job model is correctly linked with the Candidate model
-    const jobs = await Job.find({ createdBy: recruiterId }).populate({
-      path: "candidates.candidateId",
-      select: "name email", // Only fetch name and email from the Candidate document
-    });
+    const jobs = await Job.find({ createdBy: recruiterId });
 
-    console.log("Jobs found:", jobs.length); // Debugging output
+    console.log("Jobs found:", jobs.length);
+    console.log(jobs);
+    // Debugging output
+    // const interviews = jobs.interviews.map((interview) => ({
+    //   candidateId: interview.candidateId,
+    //   date: interview.interviewDate,
+    // }));
+
+    // console.log("Interview Details:");
+    // interviews.forEach((interview) => {
+    //   console.log(`Candidate ID: ${interview.candidateId}`);
+    //   console.log(`Date: ${interview.date}`);
+    //   console.log("------------------------");
+    // });
 
     const candidatesForInterview = jobs.reduce((acc, job) => {
       const interviewCandidates = job.candidates.filter(
@@ -242,6 +264,8 @@ export const getAllCandidates_for_hired = async (req, res) => {
       });
       return acc;
     }, []);
+
+    console.log(candidatesForInterview);
 
     res.status(200).send(candidatesForInterview);
   } catch (error) {
@@ -363,7 +387,7 @@ export const deleteJob = async (req, res) => {
 // Endpoint to add a user to the interviews array
 export const addUser = async (req, res) => {
   console.log("Received data for job:", req.body);
-  const { index, userId, interviewDate } = req.body;
+  const { index, userId, interviewDate, recruiterId } = req.body;
   const { jobId } = req.params;
 
   try {
@@ -408,8 +432,12 @@ export const addUser = async (req, res) => {
     // Save the updated job document
     await job.save();
 
+    let mail_response = await sendMail(recruiterId, userId, interviewDate);
+    console.log(mail_response);
+
     res.json({
       success: true,
+      mail_response: mail_response,
       message: interviewExists
         ? "Interviewee updated successfully"
         : "New interviewee added successfully",

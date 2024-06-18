@@ -2,9 +2,11 @@ import nodemailer from "nodemailer";
 import { Recruiter } from "../models/candidateModel.js";
 import { Candidate } from "../models/candidateModel.js";
 
-export const sendMail = async (req, res) => {
-  const { recruiterId, candidateId, jobId, interviewDate } = req.body;
-
+export const sendMail = async (
+  recruiterId,
+  candidateId,
+  interviewDate
+) => {
   const recruiter =
     (await Recruiter.findById(recruiterId)) || "Unknown Recruiter";
   const candidate =
@@ -12,7 +14,7 @@ export const sendMail = async (req, res) => {
 
   if (!recruiter || !candidate) {
     console.error("Recruiter or Candidate not found");
-    return res.status(404).send("Recruiter or Candidate not found");
+    return "Recruiter or Candidate not found";
   }
 
   const transporter = nodemailer.createTransport({
@@ -55,13 +57,10 @@ export const sendMail = async (req, res) => {
       html: emailHtmlContent, // html body
     });
 
-    console.log("Message sent: %s", info.messageId);
-    res.json({
-      message: "Mail sent successfully",
-      info: info,
-    });
+    console.log("Message sent:", info);
+    return "Mail sent successfully";
   } catch (error) {
     console.error("Error sending email: ", error);
-    res.status(500).send("Failed to send email");
+    return "Failed to send email";
   }
 };

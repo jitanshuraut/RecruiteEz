@@ -14,7 +14,9 @@ import {
   getCandidates_for_selected,
   getRecruiterId,
   get_All_Job,
+  get_All_Post,
   get_candidate,
+  get_single_Job,
   jobStatus,
   set_Candidate_Status,
   tokenDetails,
@@ -22,22 +24,25 @@ import {
   updateSelectedJob,
 } from "../controllers/Jobs.js";
 import multer from "multer";
+import { viewResume } from "../controllers/viewResume.js";
 const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // router.post("/mail", sendMail);
 
-// router.get("/resume/:userId", viewResume);
+router.get("/resume/:userId", viewResume);
 
 // POST - Create a new job
 router.post("/", create_Job);
 
 // GET - Retrieve all jobs
-router.get("/all", get_All_Job);
+router.post("/all", get_All_Job);
+
+router.get("/allPost", get_All_Post);
 
 // GET - Retrieve a single job by ID
-router.get("/:jobId", get_All_Job);
+router.get("/:jobId", get_single_Job);
 
 // GET - Retrieve all candidates for a job by ID
 router.get("/:jobId/candidates", Retrieve_candidates_Job);
