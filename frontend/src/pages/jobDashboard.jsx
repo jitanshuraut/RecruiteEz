@@ -26,7 +26,6 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import useDataFetch from "@/hooks/useDataFetch";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -206,8 +205,10 @@ export function JobDashboard() {
   } else if (status_can === "error" || status_job === "error") {
     return <div>Error fetching data</div>;
   } else if (
-    (status_can === "success" && data_can) ||
-    (status_job === "success" && data_job)
+    status_can === "success" &&
+    data_can &&
+    status_job === "success" &&
+    data_job
   ) {
     return (
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -262,24 +263,10 @@ export function JobDashboard() {
                 <div className="flex items-center">
                   <TabsList>
                     <TabsTrigger value="all">All Candidates</TabsTrigger>
-                    <TabsTrigger value="top">Top Candidates</TabsTrigger>
                     <TabsTrigger value="selected">
                       Selected Candidates
                     </TabsTrigger>
                   </TabsList>
-
-                  <div className="ml-auto flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      className="h-8 gap-1"
-                      onClick={() => handleJobClick(job._id)}
-                    >
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        View All
-                      </span>
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
                 </div>
                 <TabsContent value="all">
                   <Tabs_Holder

@@ -1,7 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import useDataFetch from "@/hooks/useDataFetch";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,72 +9,85 @@ import SideNavbar from "@/components/ui/SideNavbar";
 import Tabs_Holder from "@/components/ui/Tabs_Holder";
 import Profile_Button from "@/components/ui/Profile_Button";
 import Nav_Top_Heading from "@/components/ui/Nav_Top_Heading";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { BounceLoader } from "react-spinners";
 
 export function AllHired() {
   const navigate = useNavigate();
-  const [recruiterId, setRecruiterid] = useState(
-    window.sessionStorage.getItem("userId")
-  );
-  const [loading, setLoading] = useState(true);
-  const [candidates, setCandidates] = useState([]);
-  const [error, setError] = useState("");
+  const recruiterId = window.sessionStorage.getItem("userId");
+  const queryClient = useQueryClient();
+
+  const fetchInterviewCandidates = async ({ queryKey }) => {
+    const [_, recruiterId] = queryKey;
+    const response = await axios.get(
+      `http://localhost:8080/jobs/hired/${recruiterId}`
+    );
+    return response.data;
+  };
+
+  const fetchCandidateDetails = async (candidateId) => {
+    const response = await fetch(
+      `http://localhost:8080/jobs/candidate/${candidateId}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch candidate details");
+    }
+    const data = await response.json();
+    return data;
+  };
+
+  const {
+    data: candidates = [],
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["interviewCandidates", recruiterId],
+    queryFn: fetchInterviewCandidates,
+    enabled: !!recruiterId,
+    staleTime: 2 * 1000,
+  });
 
   useEffect(() => {
-    const fetchInterviewCandidates = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/jobs/hired/${recruiterId}`
-        );
-        console.log(response.data)
-        setCandidates(response.data);
-      } catch (err) {
-        setError("Failed to fetch candidates: " + err.message);
-      }
+    const enhanceCandidates = async () => {
+      const enhancedCandidates = await Promise.all(
+        candidates.map(async (candidate) => {
+          const candidateDetails = await fetchCandidateDetails(
+            candidate.candidateId
+          );
+          return {
+            ...candidate,
+            candidateName: candidateDetails.name,
+            candidateEmail: candidateDetails.email,
+          };
+        })
+      );
+      queryClient.setQueryData(
+        ["interviewCandidates", recruiterId],
+        enhancedCandidates
+      );
     };
 
-    if (recruiterId) {
-      fetchInterviewCandidates();
-    }
-  }, [recruiterId]);
-  console.log("candidates : ", candidates);
-
-  async function fetchCandidateDetails(candidateId) {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/jobs/candidate/${candidateId}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch candidate details");
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching candidate details:", error);
-      return null;
-    }
-  }
-
-  async function enhanceCandidates() {
-    for (let i = 0; i < candidates.length; i++) {
-      const candidateDetails = await fetchCandidateDetails(
-        candidates[i].candidateId
-      );
-      if (candidateDetails) {
-        candidates[i].candidateName = candidateDetails.name;
-        candidates[i].candidateEmail = candidateDetails.email;
-      }
-    }
-    console.log("Enhanced candidates:", candidates);
-    setLoading(false);
-    return candidates;
-  }
-
-  useEffect(() => {
     if (candidates.length > 0) {
       enhanceCandidates();
     }
-  }, [candidates]);
+  }, [candidates, recruiterId, queryClient]);
 
+  if (isLoading) {
+    return (
+      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <Navbar index_={4} Role={"Recruiter"} />
+        <div className="flex justify-center items-center h-[100vh] w-full">
+          <BounceLoader color="#37383a" loading size={100} />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>{`Failed to fetch candidates: ${error.message}`}</div>;
+  }
+
+  console.log("Enhanced candidates:", candidates);
   const Tab_header = [
     {
       class_: false,
@@ -99,28 +111,28 @@ export function AllHired() {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <Navbar index_={4} Role={"Recruiter"} />
+  // if (loading) {
+  //   return (
+  //     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+  //       <Navbar index_={4} Role={"Recruiter"} />
 
-        <div className="flex flex-col">
-          <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-            <SideNavbar index_={4} Role={"Recruiter"} />
-            <Nav_Top_Heading Title={"Hired Candidates"} />
-            <Profile_Button Role={"recruiter"} />
-          </header>
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-            <div>Not Found</div>
-          </main>
-        </div>
-      </div>
-    );
-  }
+  //       <div className="flex flex-col">
+  //         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+  //           <SideNavbar index_={4} Role={"Recruiter"} />
+  //           <Nav_Top_Heading Title={"Hired Candidates"} />
+  //           <Profile_Button Role={"recruiter"} />
+  //         </header>
+  //         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+  //           <div>Not Found</div>
+  //         </main>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <Navbar index_={1} />
+      <Navbar index_={4} />
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <SideNavbar index_={4} />

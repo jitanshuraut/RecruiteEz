@@ -1,5 +1,4 @@
 import React from "react";
-import useDataFetch from "../hooks/useDataFetch.jsx";
 import axios from "axios";
 import {
   Table,
@@ -87,7 +86,7 @@ export function EditJobStatus() {
     return (
       <>
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-          <Navbar index_={0} Role={"Recruiter"} />
+          <Navbar index_={2} Role={"Recruiter"} />
           <div className="flex justify-center items-center h-[100vh] w-full">
             <BounceLoader color="#37383a" loading size={100} />
           </div>

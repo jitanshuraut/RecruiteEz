@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useDataFetch from "@/hooks/useDataFetch";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";

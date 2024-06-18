@@ -13,7 +13,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useLocation } from "react-router-dom";
-import useDataFetch from "@/hooks/useDataFetch";
 import Navbar from "@/components/ui/Navbar";
 import SideNavbar from "@/components/ui/SideNavbar";
 import Profile_Button from "@/components/ui/Profile_Button";

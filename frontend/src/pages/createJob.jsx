@@ -96,7 +96,7 @@ export function CreateJob() {
     return (
       <>
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-          <Navbar index_={0} Role={"candidate"} />
+          <Navbar index_={1} Role={"candidate"} />
           <div className="flex justify-center items-center h-[100vh] w-full">
             <BounceLoader color="#37383a" loading size={100} />
           </div>

@@ -1,7 +1,6 @@
 import { Dashboard } from "./pages/dashboard";
 import { JobDashboard } from "./pages/jobDashboard";
 import { Navigate } from "react-router-dom";
-import { CandidatesList } from "./pages/candidatesList";
 import { Toaster } from "@/components/ui/toaster";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -35,7 +34,6 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/jobDashboard" element={<JobDashboard />} />
-        <Route path="/candidateslist" element={<CandidatesList />} />
         <Route path="/interviewlist" element={<InterviewList />} />
         <Route path="/create-job" element={<CreateJob />} />
         <Route path="/interviews-all" element={<InterviewsAll />} />

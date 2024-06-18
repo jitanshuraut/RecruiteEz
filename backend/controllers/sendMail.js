@@ -2,11 +2,7 @@ import nodemailer from "nodemailer";
 import { Recruiter } from "../models/candidateModel.js";
 import { Candidate } from "../models/candidateModel.js";
 
-export const sendMail = async (
-  recruiterId,
-  candidateId,
-  interviewDate
-) => {
+export const sendMail = async (recruiterId, candidateId, interviewDate) => {
   const recruiter =
     (await Recruiter.findById(recruiterId)) || "Unknown Recruiter";
   const candidate =
@@ -23,8 +19,8 @@ export const sendMail = async (
     port: 587,
     secure: false,
     auth: {
-      user: process.env.EMAIL,
-      pass: process.env.APP_PASSWORD,
+      user: "ui21cs27jitanshu@gmail.com",
+      pass: "Random$123ipv6127.0.0.1",
     },
   });
 
@@ -49,7 +45,7 @@ export const sendMail = async (
     const info = await transporter.sendMail({
       from: {
         name: `Recruiter ${recruiter.name}`,
-        address: process.env.EMAIL,
+        address: "ui21cs27jitanshu@gmail.com",
       },
       to: [`${candidate.email}`], // list of receivers
       subject: emailSubject, // Subject line

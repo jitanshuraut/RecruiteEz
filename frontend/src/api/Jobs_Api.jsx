@@ -60,7 +60,7 @@ export const job_Candidates = async ({ queryKey }) => {
   return response.data;
 };
 
-export const jobInterviews = async ({ queryKey }) => {
+export const job_Interviews = async ({ queryKey }) => {
   const [_, jobId] = queryKey;
 
   const response = await axios.get(
@@ -69,3 +69,31 @@ export const jobInterviews = async ({ queryKey }) => {
   return response.data;
 };
 
+export const hireCandidate = async ({ jobId, userId }) => {
+  const response = await axios.put(
+    `http://localhost:8080/jobs/${jobId}/hire-candidate`,
+    {
+      candidateId: userId,
+    }
+  );
+  return response.data;
+};
+
+export const handle_Reject = async ({jobId, userId}) => {
+  console.log(userId);
+  try {
+    const response = await axios.put(
+      `http://localhost:8080/jobs/${jobId}/reject`,
+      {
+        userId,
+      }
+    );
+
+    console.log(response.data.message);
+  } catch (error) {
+    console.error(
+      "Failed to reject candidate:",
+      error.response?.data?.error || error.message
+    );
+  }
+};

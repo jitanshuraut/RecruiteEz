@@ -142,6 +142,8 @@ export const Retrieve_all_candidates = async (req, res) => {
         interviewDate: interviewDetails.interviewDate,
       };
     });
+    console.log("interver candidate:----------------------------------------");
+    console.log(candidatesWithInterviewDetails);
 
     res.json(candidatesWithInterviewDetails);
   } catch (error) {
@@ -417,6 +419,11 @@ export const addUser = async (req, res) => {
     }
 
     // Update candidate status to 'interview'
+    console.log(index);
+    console.log(job.candidates.length);
+    console.log(job.candidates[index].candidateId);
+    console.log(userId)
+
     if (
       index >= 0 &&
       index < job.candidates.length &&
@@ -432,12 +439,11 @@ export const addUser = async (req, res) => {
     // Save the updated job document
     await job.save();
 
-    let mail_response = await sendMail(recruiterId, userId, interviewDate);
-    console.log(mail_response);
+    // let mail_response = await sendMail(recruiterId, userId, interviewDate);
+    // console.log(mail_response);
 
     res.json({
       success: true,
-      mail_response: mail_response,
       message: interviewExists
         ? "Interviewee updated successfully"
         : "New interviewee added successfully",
