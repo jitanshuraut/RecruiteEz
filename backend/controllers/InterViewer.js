@@ -7,7 +7,7 @@ export const New_interviewer = async (req, res) => {
     await interviewer.save();
     res.status(201).send(interviewer);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({ message: "Error occur in adding user" });;
   }
 };
 
@@ -17,7 +17,7 @@ export const Get_all_interviews = async (req, res) => {
     const interviewers = await Recruiter.find({});
     res.send(interviewers);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in getting all user" });;
   }
 };
 
@@ -30,7 +30,7 @@ export const Get_single_interviewer = async (req, res) => {
     }
     res.send(interviewer);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in getting user" });
   }
 };
 
@@ -47,7 +47,7 @@ export const Update_single_interviewer = async (req, res) => {
     }
     res.send(interviewer);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({ message: "Error occur in updateing user" });
   }
 };
 
@@ -62,6 +62,6 @@ export const Delete_single_interviewer = async (req, res) => {
     }
     res.send(interviewer);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in deleting user" });
   }
 };

@@ -36,7 +36,7 @@ export const create_Job = async (req, res) => {
     res.status(201).send(job);
   } catch (error) {
     console.error("Failed to create job:", error);
-    res.status(400).send({ error: error.message });
+    res.status(400).json({ message: "Error occur in creating job" });
   }
 };
 
@@ -52,7 +52,7 @@ export const get_All_Job = async (req, res) => {
     });
     res.send(jobs);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in getting all jobs" });
   }
 };
 
@@ -61,7 +61,7 @@ export const get_All_Post = async (req, res) => {
     const jobs = await Job.find({});
     res.send(jobs);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in getting all posts" });
   }
 };
 
@@ -94,7 +94,7 @@ export const get_single_Job = async (req, res) => {
     }
     res.send(job);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in getting single jobs" });
   }
 };
 
@@ -114,7 +114,7 @@ export const Retrieve_candidates_Job = async (req, res) => {
 
     res.send(candidates);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in Retrieve candidates" });
   }
 };
 
@@ -147,7 +147,7 @@ export const Retrieve_all_candidates = async (req, res) => {
 
     res.json(candidatesWithInterviewDetails);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error occur in Retrieve all candidates" });
   }
 };
 
@@ -168,7 +168,7 @@ export const get_candidate = async (req, res) => {
     res.status(200).send(candidate);
   } catch (error) {
     console.error("Failed to fetch candidate:", error);
-    res.status(500).send({ error: "Server error", details: error.message });
+    res.status(500).json({ message: "Error occur in candidate" });
   }
 };
 
@@ -224,10 +224,7 @@ export const getCandidates_for_Interview = async (req, res) => {
     res.status(200).send(candidatesForInterview);
   } catch (error) {
     console.error("Failed to fetch candidate interviews:", error);
-    res.status(500).send({
-      error: "Failed to fetch candidate interviews",
-      details: error.message,
-    });
+    res.status(500).json({ message: "Failed to fetch candidate interviews" });
   }
 };
 
@@ -272,10 +269,7 @@ export const getAllCandidates_for_hired = async (req, res) => {
     res.status(200).send(candidatesForInterview);
   } catch (error) {
     console.error("Failed to fetch candidate interviews:", error);
-    res.status(500).send({
-      error: "Failed to fetch candidate interviews",
-      details: error.message,
-    });
+    res.status(500).json({ message: "Failed to fetch candidate interviews" });
   }
 };
 
@@ -318,10 +312,7 @@ export const getCandidates_for_selected = async (req, res) => {
     res.status(200).send(candidatesForInterview);
   } catch (error) {
     console.error("Failed to fetch candidate interviews:", error);
-    res.status(500).send({
-      error: "Failed to fetch candidate interviews",
-      details: error.message,
-    });
+    res.status(500).json({ message: "Failed to fetch candidate interviews" });
   }
 };
 
@@ -337,7 +328,7 @@ export const updateJob = async (req, res) => {
     }
     res.send(job);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({ message: "Error occur in updateing job" });
   }
 };
 
@@ -369,7 +360,9 @@ export const updateSelectedJob = async (req, res) => {
 
     res.status(200).json({ success: true, data: result });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Error occur in update job " });
   }
 };
 
@@ -382,7 +375,7 @@ export const deleteJob = async (req, res) => {
     }
     res.send({ message: "Job successfully deleted." });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Error occur in deleting  job" });
   }
 };
 
@@ -533,7 +526,7 @@ export const Reject_candidate = async (req, res) => {
 
     res.json({ success: true, message: "rejected successfully", job });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, message: "Error occur in reject " });
   }
 };
 
@@ -621,7 +614,6 @@ export const Apply_Job = async (req, res) => {
     } catch (error) {
       res.status(401).send({
         success: false,
-        error,
         message: "Error in token verification",
       });
     }
@@ -693,7 +685,7 @@ export const jobStatus = async (req, res) => {
 
     res.send(updatedJob);
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: "Error occur in jobstatus" });
   }
 };
 
@@ -712,6 +704,6 @@ export const getRecruiterId = async (req, res) => {
     const jobs = await Job.find({ createdBy: recruiterId });
     res.status(200).json(jobs);
   } catch (error) {
-    res.status(500).send({ message: "Error fetching jobs", error });
+    res.status(500).send({ message: "Error fetching jobs" });
   }
 };
