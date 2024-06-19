@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { Recruiter } from "../models/candidateModel.js";
 import { Candidate } from "../models/candidateModel.js";
+import { Email, PassKey } from "../config.js";
 
 export const sendMail = async (recruiterId, candidateId, interviewDate) => {
   const recruiter =
@@ -19,8 +20,8 @@ export const sendMail = async (recruiterId, candidateId, interviewDate) => {
     port: 587,
     secure: false,
     auth: {
-      user: "ui21cs27jitanshu@gmail.com",
-      pass: "Random$123ipv6127.0.0.1",
+      user: Email,
+      pass: PassKey,
     },
   });
 

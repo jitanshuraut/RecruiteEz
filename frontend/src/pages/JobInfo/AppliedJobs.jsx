@@ -37,10 +37,6 @@ const AppliedJobs = () => {
   );
   const [jobs, setJobs] = useState([]);
   const [matchedJobs, setMatchedJobs] = useState([]);
-  const [jobsApplied, setJobsApplied] = useState(0);
-  const [interviewCount, setInterviewCount] = useState(0);
-  const [hiredCount, setHiredCount] = useState(0);
-  const [recentJobs, setRecentJobs] = useState([]);
 
   const requestData = {
     userId: userId,
@@ -50,7 +46,7 @@ const AppliedJobs = () => {
   const { data, status, isFetching } = useQuery({
     queryKey: ["jobs:UserApplied", userId],
     queryFn: Get_All_Jobs,
-    staleTime:1*1000
+    staleTime: 1 * 1000,
   });
 
   useEffect(() => {

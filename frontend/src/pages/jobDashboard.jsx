@@ -54,7 +54,6 @@ import "react-clock/dist/Clock.css";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Navbar from "@/components/ui/Navbar";
 import SideNavbar from "@/components/ui/SideNavbar";
 import Nav_Top_Heading from "@/components/ui/Nav_Top_Heading";
@@ -65,11 +64,15 @@ import { useQuery } from "@tanstack/react-query";
 import { BounceLoader } from "react-spinners";
 import { Get_recruiter_Jobs } from "@/api/Recruiter_Apis.jsx";
 import { Get_Job, job_Candidates } from "@/api/Jobs_Api";
+import TimePicker from "react-time-picker";
+import { useToast } from "@/components/ui/use-toast";
 
 export function JobDashboard() {
   const location = useLocation();
   const { jobId } = location.state || {};
   const navigate = useNavigate();
+  const [value, onChange] = useState("10:00");
+  const { toast } = useToast();
 
   const [job, setJob] = useState([]);
   const [jobCandidates, setJobCandidates] = useState([]);
@@ -110,10 +113,6 @@ export function JobDashboard() {
     }
   }, [status_can, data_can]);
 
-  const handleJobClick = (id) => {
-    navigate("/candidateslist", { state: { jobId: id } });
-  };
-
   const handleJobClick2 = (id) => {
     navigate("/interviewlist", { state: { jobId: id } });
   };
@@ -144,9 +143,7 @@ export function JobDashboard() {
   const handleInterview = async (index) => {
     const userId = jobCandidates[index]._id;
     console.log("Interview:", index, userId);
-    const formattedDateTime = `${format(dateTime.date, "dd/MM/yyyy")} ${
-      dateTime.time
-    }`;
+    const formattedDateTime = value;
 
     try {
       const response = await axios.put(
@@ -160,6 +157,7 @@ export function JobDashboard() {
       );
 
       console.log(response.data);
+      toast({ title: "Send Email Succesfully" });
     } catch (error) {
       console.error(
         "Failed to add interviewee:",
@@ -463,19 +461,14 @@ export function JobDashboard() {
                                       <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
                                       >
-                                        <DemoContainer
+                                        {/* <DemoContainer
                                           components={["TimePicker"]}
-                                        >
-                                          {/* <TimePicker
-                                            label="Select a time"
-                                            onChange={(newValue) =>
-                                              setDateTime({
-                                                ...dateTime,
-                                                time: newValue,
-                                              })
-                                            }
-                                          /> */}
-                                        </DemoContainer>
+                                        > */}
+                                        <TimePicker
+                                          onChange={onChange}
+                                          value={value}
+                                        />
+                                        {/* </DemoContainer> */}
                                       </LocalizationProvider>
                                     </div>
                                   </div>

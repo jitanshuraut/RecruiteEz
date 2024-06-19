@@ -61,7 +61,7 @@ const ScheduledInterview = () => {
   const { data, status, isFetching } = useQuery({
     queryKey: ["jobs:Userschedule", userId],
     queryFn: Get_All_Jobs,
-    staleTime:2*1000
+    staleTime: 2 * 1000,
   });
 
   useEffect(() => {

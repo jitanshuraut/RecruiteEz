@@ -422,7 +422,7 @@ export const addUser = async (req, res) => {
     console.log(index);
     console.log(job.candidates.length);
     console.log(job.candidates[index].candidateId);
-    console.log(userId)
+    console.log(userId);
 
     if (
       index >= 0 &&
@@ -439,8 +439,8 @@ export const addUser = async (req, res) => {
     // Save the updated job document
     await job.save();
 
-    // let mail_response = await sendMail(recruiterId, userId, interviewDate);
-    // console.log(mail_response);
+    let mail_response = await sendMail(recruiterId, userId, interviewDate);
+    console.log(mail_response);
 
     res.json({
       success: true,
@@ -625,6 +625,11 @@ export const Apply_Job = async (req, res) => {
         message: "Error in token verification",
       });
     }
+
+    // console.log(candidates_var);
+
+    // job.candidates.push(candidates_var);
+    // job.candidates.push(userId);
   } catch (error) {
     console.error("Error Applying for the job", error);
     return res.status(500).json({ message: "Internal Server Error" });

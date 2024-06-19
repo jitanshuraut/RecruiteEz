@@ -38,7 +38,7 @@ const JobDescription = () => {
   });
 
   const Apply_Mutation = useMutation({
-    mutationFn: () => Apply_Job(jobId),
+    mutationFn: (jobId) => Apply_Job(jobId),
     onSuccess: (data) => {
       console.log("Success", data);
       toast({ title: "Job Applied Successfully" });
@@ -50,7 +50,7 @@ const JobDescription = () => {
   });
 
   const handleApply = () => {
-    Apply_Mutation.mutate();
+    Apply_Mutation.mutate(jobId);
   };
 
   if (isFetching) {

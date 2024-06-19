@@ -72,25 +72,6 @@ export function InterviewList() {
     }
   }, [statusIntv, dataIntv]);
 
-  // const handleHired = async (userId, index) => {
-  //   console.log(userId, index);
-  //   try {
-  //     const response = await axios.put(
-  //       `http://localhost:8080/jobs/${jobId}/hire-candidate`,
-  //       {
-  //         candidateId: userId,
-  //       }
-  //     );
-
-  //     console.log(response.data.message);
-  //   } catch (error) {
-  //     console.error(
-  //       "Failed to hire candidate:",
-  //       error.response?.data?.error || error.message
-  //     );
-  //   }
-  // };
-
   const hireMutation = useMutation({
     mutationFn: hireCandidate,
     onSuccess: (data) => {
@@ -129,25 +110,6 @@ export function InterviewList() {
     console.log(userId, index);
     rejectMutation.mutate({ jobId, userId });
   };
-
-  // const handleReject = async (userId, index) => {
-  //   console.log(userId, index);
-  //   try {
-  //     const response = await axios.put(
-  //       `http://localhost:8080/jobs/${jobId}/reject`,
-  //       {
-  //         userId,
-  //       }
-  //     );
-
-  //     console.log(response.data.message);
-  //   } catch (error) {
-  //     console.error(
-  //       "Failed to reject candidate:",
-  //       error.response?.data?.error || error.message
-  //     );
-  //   }
-  // };
 
   const tabHeader = [
     {

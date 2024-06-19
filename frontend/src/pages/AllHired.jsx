@@ -41,7 +41,7 @@ export function AllHired() {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["interviewCandidates", recruiterId],
+    queryKey: ["interviewCandidates:hired", recruiterId],
     queryFn: fetchInterviewCandidates,
     enabled: !!recruiterId,
     staleTime: 2 * 1000,
