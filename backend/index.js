@@ -11,12 +11,21 @@ import jobRoutes from "./routes/jobs.js";
 import authRoutes from "./routes/authRoutes.js";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import { rateLimit } from "express-rate-limit";
 
 dotenv.config();
 const app = express();
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  skipFailedRequests: true,
+});
 //middlewares
 app.use(express.json());
+app.use(limiter);
 app.use(morgan("dev"));
 const corsOptions = {
   origin: "http://localhost:5173",
